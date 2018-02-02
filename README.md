@@ -6,11 +6,12 @@ Things to do:
 - [x] 1. Create Dotnet Core 2.0 project
 - [x] 2. Streamline pages and remove cruft that webpack will undertake
 - [x] 3. Install yarn and webpack
-- [ ] 4. Add first webpack config and update build process to run it
-- [ ] 5. Create production and development configs 
-- [ ] 6. Add vendor configs 
-- [ ] 7. Include less files
-- [ ] 8. Implement more advanced plugins 
+- [x] 4. Add first webpack config 
+- [ ] 5. Update build process to run webpack
+- [ ] 6. Create production and development configs 
+- [ ] 7. Add vendor configs 
+- [ ] 8. Include less files
+- [ ] 9. Implement more advanced plugins 
 
 1. Using the dotnet core cli create an mvc project
 ```
@@ -249,3 +250,52 @@ For quicker testing and a better user experience it is a good idea to install it
 * Yarn: `yarn global add webpack`
 * NPM: `npm install -g webpack`
 
+4. Initial webpack configuration
+
+Before we create any webpack config, some project configuration needs to take place. Usually, with dotnet core anything under the `wwwroot/` folder is published for this project though that is not going to be the case. We will NOT be publishing the css, javascript or images because they should be bundled by webpack. Instead we are going to be publishing as `dist/` folder containing these bundles, as such we need to exclude the paths of css, javascript and images.
+
+In the `.csproj` file add:
+```
+  <ItemGroup>
+    <Content Update="wwwroot\css\**\*.*" CopyToPublishDirectory="Never" />
+    <Content Update="wwwroot\js\**\*.*" CopyToPublishDirectory="Never" />
+    <Content Update="wwwroot\images\**\*.*" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+```
+
+Add two javascript files that we will use to test whether webpack worked.
+
+Add `wwwroot/js/other.js`:
+```
+function func() {
+    document.getElementById("title").style.color = "#ff0000";
+}
+
+module.exports = func;
+```
+
+Add `wwwroot/js/main.js`:
+```
+var other = require('./other');
+
+other();
+```
+All we are doing here is making the title on the homepage red.
+
+Add the code to the view which gives us a title to update and loads the bundle.
+
+To `index.html` add:
+```
+<h2 id="title">@ViewData["Title"]</h2>
+
+<script src="~/dist/main.build.js"></script>
+```
+
+<hr>
+
+# Sources
+
+* http://cecilphillip.com/setting-up-webpack-in-asp-net-core/
+* https://medium.com/making-internets/webpack-configuration-done-right-86c325a6927f
+* https://simonsmith.io/organising-webpack-config-environments/
+* https://medium.com/@nirjhor123/webpack-3-quickstarter-configure-webpack-from-scratch-30a6c394038a

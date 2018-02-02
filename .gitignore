@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io/api/git,code,macos,csharp,windows
 
+### Custom ###
+website/wwwroot/dist
+
 ### Code ###
 # Visual Studio Code - https://code.visualstudio.com/
 .settings/
