@@ -1,0 +1,12 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "Simple repository with webpack",
+  "main": "index.js",
+  "repository": "https://github.com/TheYorkshireDev/dotnetcore-webpack",
+  "author": "TheYorkshireDev",
+  "license": "MIT",
+  "dependencies": {
+    "webpack": "^3.10.0"
+  }
+}

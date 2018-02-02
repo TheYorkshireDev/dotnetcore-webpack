@@ -5,7 +5,7 @@ A simple dotnet core web application that utilises webpack for bundling assets s
 Things to do:
 - [x] 1. Create Dotnet Core 2.0 project
 - [x] 2. Streamline pages and remove cruft that webpack will undertake
-- [ ] 3. Install yarn and webpack
+- [x] 3. Install yarn and webpack
 - [ ] 4. Add first webpack config and update build process to run it
 - [ ] 5. Create production and development configs 
 - [ ] 6. Add vendor configs 
@@ -213,3 +213,39 @@ dotnet new mvc
     
     @RenderSection("Scripts", required: false)
 ```
+
+3. Install javascript dependency manager and first libraries
+
+I am using Yarn as my dependency manager but NPM would also work too, make sure what ever you choose is installed globally.
+
+* Install Yarn: https://yarnpkg.com/en/docs/install
+* Install NPM: https://www.npmjs.com/get-npm
+
+Initalise the repository for the javascript libraries
+```
+cd website/
+website$ yarn init
+
+yarn init v1.3.2
+question name (website): 
+question version (1.0.0): 
+question description: Simple repository with webpack
+question entry point (index.js): 
+question repository url: https://github.com/TheYorkshireDev/dotnetcore-webpack
+question author: TheYorkshireDev
+question license (MIT): 
+question private: 
+success Saved package.json
+✨  Done in 74.29s.
+```
+
+This adds `package.json` to the root of the website folder
+
+The first library we need is `webpack` so lets install it:
+* Yarn: `yarn add webpack`
+* NPM: `npm install webpack`
+
+For quicker testing and a better user experience it is a good idea to install it globally too:
+* Yarn: `yarn global add webpack`
+* NPM: `npm install -g webpack`
+
