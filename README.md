@@ -7,7 +7,7 @@ Things to do:
 - [x] 2. Streamline pages and remove cruft that webpack will undertake
 - [x] 3. Install yarn and webpack
 - [x] 4. Add first webpack config 
-- [ ] 5. Update build process to run webpack
+- [x] 5. Update build process to run webpack
 - [ ] 6. Create production and development configs 
 - [ ] 7. Add vendor configs 
 - [ ] 8. Include less files
@@ -30,12 +30,12 @@ dotnet new mvc
 
 **Edit:**
 * Remove from Views/Home/About.cshtml
-```
+```html
 <p>Use this area to provide additional information.</p>
 ```
 
 * Remove from Views/Home/Contact.cshtml
-```
+```html
     <address>
         One Microsoft Way<br />
         Redmond, WA 98052-6399<br />
@@ -50,7 +50,7 @@ dotnet new mvc
 ```
 
 * Remove from Views/Home/Home.cshtml
-```
+```html
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -156,7 +156,7 @@ dotnet new mvc
 ```
 
 * Remove from Views/Shared/_Layout.cshtml
-```
+```html
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -168,7 +168,7 @@ dotnet new mvc
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 ```
-```
+```html
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -190,7 +190,7 @@ dotnet new mvc
         </div>
     </nav>
 ```
-```
+```html
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -255,7 +255,7 @@ For quicker testing and a better user experience it is a good idea to install it
 Before we create any webpack config, some project configuration needs to take place. Usually, with dotnet core anything under the `wwwroot/` folder is published for this project though that is not going to be the case. We will NOT be publishing the css, javascript or images because they should be bundled by webpack. Instead we are going to be publishing as `dist/` folder containing these bundles, as such we need to exclude the paths of css, javascript and images.
 
 In the `.csproj` file add:
-```
+```xml
   <ItemGroup>
     <Content Update="wwwroot\css\**\*.*" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\js\**\*.*" CopyToPublishDirectory="Never" />
@@ -266,7 +266,7 @@ In the `.csproj` file add:
 Add two javascript files that we will use to test whether webpack worked.
 
 Add `wwwroot/js/other.js`:
-```
+```js
 function func() {
     document.getElementById("title").style.color = "#ff0000";
 }
@@ -275,7 +275,7 @@ module.exports = func;
 ```
 
 Add `wwwroot/js/main.js`:
-```
+```js
 var other = require('./other');
 
 other();
@@ -285,10 +285,49 @@ All we are doing here is making the title on the homepage red.
 Add the code to the view which gives us a title to update and loads the bundle.
 
 To `index.html` add:
-```
+```html
 <h2 id="title">@ViewData["Title"]</h2>
 
 <script src="~/dist/main.build.js"></script>
+```
+
+5. Build webpack with dotnet
+
+Webpack ideally should be built alongside the C# build rather than calling `webpack` directly, so lets add a couple of targets in the `.csproj`.
+
+Add a build step to run webpack on build:
+```xml
+  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+```
+
+Add a build step to run webpack on publish:
+```xml
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+
+    <Exec Command="npm install" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="wwwroot\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
 ```
 
 <hr>
