@@ -49,110 +49,12 @@ dotnet new mvc
     </address>
 ```
 
-* Remove from Views/Home/Home.cshtml
+* Refactor Views/Home/Home.cshtml to
 ```html
-    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-            <li data-target="#myCarousel" data-slide-to="3"></li>
-        </ol>
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
-                <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-                <div class="carousel-caption" role="option">
-                    <p>
-                        Learn how to build ASP.NET apps that can run anywhere.
-                        <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="item">
-                <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-                <div class="carousel-caption" role="option">
-                    <p>
-                        There are powerful new features in Visual Studio for building modern web apps.
-                        <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="item">
-                <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
-                <div class="carousel-caption" role="option">
-                    <p>
-                        Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.
-                        <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="item">
-                <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
-                <div class="carousel-caption" role="option">
-                    <p>
-                        Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                        <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-3">
-            <h2>Application uses</h2>
-            <ul>
-                <li>Sample pages using ASP.NET Core MVC</li>
-                <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-            </ul>
-        </div>
-        <div class="col-md-3">
-            <h2>How to</h2>
-            <ul>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-            </ul>
-        </div>
-        <div class="col-md-3">
-            <h2>Overview</h2>
-            <ul>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-            </ul>
-        </div>
-        <div class="col-md-3">
-            <h2>Run &amp; Deploy</h2>
-            <ul>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-                <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-            </ul>
-        </div>
-    </div>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<h2 id="title">@ViewData["Title"]</h2>
 ```
 
 * Remove from Views/Shared/_Layout.cshtml
@@ -284,11 +186,11 @@ All we are doing here is making the title on the homepage red.
 
 Add the code to the view which gives us a title to update and loads the bundle.
 
-To `index.html` add:
+To `_layout.cshtml` add to the bottom of the body:
 ```html
-<h2 id="title">@ViewData["Title"]</h2>
-
-<script src="~/dist/main.build.js"></script>
+<script src="~/dist/main.build.js" asp-append-version="true"></script>
+</body>
+</html>
 ```
 
 5. Build webpack with dotnet
@@ -306,7 +208,7 @@ Add a build step to run webpack on build:
 
     <!-- In development, the dist files won't exist on the first run or when cloning to
          a different machine, so rebuild them if not already present. -->
-    <Message Importance="high" Text="Performing Webpack build..." />
+    <Message Importance="high" Text="Performing development Webpack build..." />
     <Exec Command="node node_modules/webpack/bin/webpack.js" />
   </Target>
 ```
@@ -317,6 +219,7 @@ Add a build step to run webpack on publish:
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
 
     <Exec Command="npm install" />
+    <Message Importance="high" Text="Performing production Webpack build..." />
     <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
 
     <!-- Include the newly-built files in the publish output -->
@@ -328,6 +231,96 @@ Add a build step to run webpack on publish:
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+```
+
+6. Create production and development configs
+
+We are going to extend the webpack configuration to allow for different environments such as development and production. In addition to the environments we want to reduce the amount of duplication between the two and therefore we will also have a base/common config.
+
+Create a webpack folder with three files:
+```
+webpack/
+  - webpack.base.config.js
+  - webpack.dev.config.js
+  - webpack.prod.config.js
+```
+
+We need to install a few additional javascript packages for our webpack config:
+```
+yarn add webpack-merge
+yarn add uglifyjs-webpack-plugin
+```
+
+The location of the entry point and the name of the output bundle is not going to change depending on environment so these should be defined in the `webpack.base.config.js`.
+
+```js
+var path = require('path');
+
+function baseConfig(currentDirectory) {
+    var config = {
+        entry: {
+            main: './wwwroot/js/main'
+        },
+        output: {
+            publicPath: "/dist/",
+            path: path.join(currentDirectory, '/wwwroot/dist/'),
+            filename: 'main.build.js'
+        }
+    };
+
+    return config;
+}
+
+module.exports = baseConfig;
+```
+You may notice we pass in the current directory, this is because these webpack configs are not located in the root of the project so calling `__dirname` here would give us the incorrect folder.
+
+In the development environment it is useful to have source-map for debugging javascript issues, so we add source map to the development config in `webpack.dev.config.js`
+
+```js
+var config = {
+    devtool: 'eval-source-map'
+};
+
+module.exports = config;
+```
+
+For production environments you want javascript to be minified so we will add this configuration to `webpack.prod.config.js`
+
+```js
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+var config = {
+  plugins: [
+    // Minify JS
+    new UglifyJsPlugin({
+      sourceMap: false
+    })
+  ]
+};
+
+module.exports = config;
+```
+
+Edit the `webpack.config.js` file to call each of these specific files depending on the environment.
+
+```js
+/*
+ * Webpack configuration
+ *
+ * This file is is the entry point for running webpack. 
+ */
+var merge = require('webpack-merge');
+var baseConfig = require('./webpack/webpack.base.config.js');
+var devConfig = require('./webpack/webpack.dev.config.js');
+var prodConfig = require('./webpack/webpack.prod.config.js');
+
+var currentDirectory = __dirname;
+
+module.exports = (env) => {
+    const isDevBuild = !(env && env.prod);
+    return merge(baseConfig(currentDirectory), isDevBuild ? devConfig : prodConfig);
+};
 ```
 
 <hr>

@@ -7,6 +7,8 @@
   "author": "TheYorkshireDev",
   "license": "MIT",
   "dependencies": {
-    "webpack": "^3.10.0"
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "webpack": "^3.10.0",
+    "webpack-merge": "^4.1.1"
   }
 }
